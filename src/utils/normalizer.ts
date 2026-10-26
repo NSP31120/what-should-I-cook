@@ -36,8 +36,9 @@ const SYNONYMS: Record<string, string> = {
   'sea salt': 'salt',
   'kosher salt': 'salt',
   'table salt': 'salt',
-  'black pepper': 'pepper',
-  'ground black pepper': 'pepper',
+  'pepper': 'black pepper',
+  'black pepper': 'black pepper',
+  'ground black pepper': 'black pepper',
   'granulated sugar': 'sugar',
   'white sugar': 'sugar',
   'brown sugar': 'sugar',
@@ -166,16 +167,19 @@ export function normalizeIngredient(input: string): string {
  * Check if a recipe ingredient is matched by any user pantry item
  */
 export function isIngredientMatched(recipeIngNormalized: string, userIngNormalizedList: string[]): boolean {
-  if (userIngNormalizedList.includes(recipeIngNormalized)) {
+  const normalizedRecipeIngredient = normalizeIngredient(recipeIngNormalized);
+  const normalizedUserIngredients = new Set(userIngNormalizedList.map(normalizeIngredient));
+
+  if (normalizedUserIngredients.has(normalizedRecipeIngredient)) {
     return true;
   }
   
   // Partial substring match in either direction
-  for (const userIng of userIngNormalizedList) {
+  for (const userIng of normalizedUserIngredients) {
     if (
-      userIng === recipeIngNormalized ||
-      (userIng.length >= 3 && recipeIngNormalized.includes(userIng)) ||
-      (recipeIngNormalized.length >= 3 && userIng.includes(recipeIngNormalized))
+      userIng === normalizedRecipeIngredient ||
+      (userIng.length >= 3 && normalizedRecipeIngredient.includes(userIng)) ||
+      (normalizedRecipeIngredient.length >= 3 && userIng.includes(normalizedRecipeIngredient))
     ) {
       return true;
     }

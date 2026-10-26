@@ -39,6 +39,7 @@ export function RecipeImage({
           alt={alt}
           loading="lazy"
           decoding="async"
+          referrerPolicy="no-referrer"
           sizes={sizes}
           className={`h-full w-full object-cover transition-opacity duration-300 ${
             isLoaded ? 'opacity-100' : 'opacity-0'

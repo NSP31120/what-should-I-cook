@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, X, Clock, Sparkles, AlertCircle } from 'lucide-react';
 import type { UserIngredient } from '../types/recipe';
 import { normalizeIngredient, COMMON_SUGGESTIONS } from '../utils/normalizer';
+import { SpiceSeasonings } from './SpiceSeasonings';
 
 interface PantryInputProps {
   ingredients: UserIngredient[];
@@ -35,7 +36,9 @@ export const PantryInput: React.FC<PantryInputProps> = ({
     }
 
     const norm = normalizeIngredient(raw);
-    const alreadyExists = ingredients.some((i) => i.normalizedName === norm);
+    const alreadyExists = ingredients.some(
+      (ingredient) => normalizeIngredient(ingredient.normalizedName) === norm
+    );
     if (alreadyExists) {
       setInputError(`"${raw}" is already in your pantry.`);
       return;
@@ -114,6 +117,7 @@ export const PantryInput: React.FC<PantryInputProps> = ({
             <button
               type="button"
               onClick={() => setMarkAsExpiring(!markAsExpiring)}
+              aria-pressed={markAsExpiring}
               className={`h-12 px-3.5 rounded-xl border text-xs sm:text-sm font-medium flex items-center gap-1.5 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                 markAsExpiring
                   ? 'bg-amber-50 border-amber-300 text-amber-900 shadow-xs'
@@ -138,7 +142,7 @@ export const PantryInput: React.FC<PantryInputProps> = ({
 
         {/* Validation error message */}
         {inputError && (
-          <div className="flex items-center gap-1.5 text-xs font-medium text-rose-600 mt-1">
+          <div role="alert" className="flex items-center gap-1.5 text-xs font-medium text-rose-600 mt-1">
             <AlertCircle className="w-3.5 h-3.5" />
             <span>{inputError}</span>
           </div>
@@ -209,12 +213,14 @@ export const PantryInput: React.FC<PantryInputProps> = ({
       <div className="mt-6 pt-4 border-t border-stone-100">
         <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-stone-400 mb-2.5">
           <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Quick tap additions</span>
+          <span>Quick Tap Additions</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {COMMON_SUGGESTIONS.map((item) => {
             const norm = normalizeIngredient(item.name);
-            const isAlreadyAdded = ingredients.some((i) => i.normalizedName === norm);
+            const isAlreadyAdded = ingredients.some(
+              (ingredient) => normalizeIngredient(ingredient.normalizedName) === norm
+            );
 
             return (
               <button
@@ -234,6 +240,7 @@ export const PantryInput: React.FC<PantryInputProps> = ({
             );
           })}
         </div>
+        <SpiceSeasonings ingredients={ingredients} onAddIngredient={handleAdd} />
       </div>
     </section>
   );

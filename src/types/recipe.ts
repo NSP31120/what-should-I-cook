@@ -1,6 +1,6 @@
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack' | 'dessert';
 export type Difficulty = 'easy' | 'medium' | 'hard';
-export type Allergen = 'dairy' | 'gluten' | 'eggs' | 'nuts' | 'soy' | 'seafood';
+export type Allergen = 'dairy' | 'gluten' | 'eggs' | 'nuts' | 'soy' | 'seafood' | 'sesame';
 
 export interface IngredientItem {
   id: string;

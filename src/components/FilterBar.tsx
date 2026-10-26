@@ -15,6 +15,7 @@ const ALLERGEN_OPTIONS: { id: Allergen; label: string }[] = [
   { id: 'nuts', label: 'Tree Nuts' },
   { id: 'soy', label: 'Soy' },
   { id: 'seafood', label: 'Fish & Seafood' },
+  { id: 'sesame', label: 'Sesame' },
 ];
 
 export const FilterBar: React.FC<FilterBarProps> = ({
@@ -38,6 +39,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     filters.mealType !== 'all' ||
     filters.maxTimeMinutes !== 'all' ||
     filters.difficulty !== 'all' ||
+    filters.sortBy !== 'best-match' ||
     filters.isVegetarian ||
     filters.isVegan ||
     filters.isGlutenFree ||
@@ -186,6 +188,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     [key]: !prev[key as keyof FilterState],
                   }))
                 }
+                aria-pressed={active}
                 className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition-all ${
                   active
                     ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
@@ -205,6 +208,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 budgetFriendlyOnly: !prev.budgetFriendlyOnly,
               }))
             }
+            aria-pressed={filters.budgetFriendlyOnly}
             className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition-all flex items-center gap-1 ${
               filters.budgetFriendlyOnly
                 ? 'bg-emerald-600 border-emerald-600 text-white shadow-xs'
@@ -234,6 +238,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 key={id}
                 type="button"
                 onClick={() => toggleAllergen(id)}
+                aria-pressed={isExcluded}
                 className={`px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium border transition-all ${
                   isExcluded
                     ? 'bg-rose-50 border-rose-300 text-rose-700 shadow-xs ring-1 ring-rose-200'

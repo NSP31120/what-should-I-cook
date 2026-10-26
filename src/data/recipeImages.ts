@@ -34,4 +34,7 @@ export const RECIPE_IMAGE_URLS: Record<string, string> = {
   'cheesy-scrambled-toast': unsplashImage('1687630433865-f86f07be989a'),
   'crispy-pan-chickpeas': unsplashImage('1644432757699-bb5a01e8fb0e'),
   'banana-oat-cookies': unsplashImage('1499636136210-6f4ee915583e'),
+  'jollof-style-rice-fish': unsplashImage('1665332195309-9d75071138f0'),
+  'south-asian-chickpea-curry': unsplashImage('1736680056470-948527554276'),
+  'korean-inspired-beef-rice-bowl': unsplashImage('1774428755031-0991c8901f08'),
 };

@@ -1,5 +1,5 @@
 import type { Recipe, UserIngredient, FilterState, RecipeMatchResult, IngredientItem } from '../types/recipe';
-import { isIngredientMatched } from '../utils/normalizer';
+import { isIngredientMatched, normalizeIngredient } from '../utils/normalizer';
 
 /**
  * Filter and rank recipes against user pantry ingredients and user filters.
@@ -16,7 +16,9 @@ export function matchAndRankRecipes(
 } {
   const userNormalizedList = userIngredients.map((i) => i.normalizedName);
   const expiringNormalizedSet = new Set(
-    userIngredients.filter((i) => i.expiresSoon).map((i) => i.normalizedName)
+    userIngredients
+      .filter((i) => i.expiresSoon)
+      .map((i) => normalizeIngredient(i.normalizedName))
   );
 
   const matchedResults: RecipeMatchResult[] = [];
@@ -68,7 +70,7 @@ export function matchAndRankRecipes(
       const isMatched = isIngredientMatched(ing.normalizedName, userNormalizedList);
       if (isMatched) {
         matchedIngredients.push(ing.name);
-        if (expiringNormalizedSet.has(ing.normalizedName)) {
+        if (expiringNormalizedSet.has(normalizeIngredient(ing.normalizedName))) {
           expiringIngredientsUsed.push(ing.name);
         }
       } else if (!ing.optional) {

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { PantryInput } from './components/PantryInput';
@@ -42,13 +42,19 @@ export function App() {
   const [favorites, setFavorites] = useLocalStorage<string[]>('wsic_favorites_v1', []);
   const [cookedRecipes, setCookedRecipes] = useLocalStorage<string[]>('wsic_cooked_v1', []);
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
+  const handleCloseRecipe = useCallback(() => setSelectedRecipeId(null), []);
 
   // Add ingredient
   const handleAddIngredient = (name: string, expiresSoon = false) => {
+    const normalizedName = normalizeIngredient(name);
+    if (ingredients.some((ingredient) => normalizeIngredient(ingredient.normalizedName) === normalizedName)) {
+      return;
+    }
+
     const newIngredient: UserIngredient = {
       id: `ing-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       name: name.trim(),
-      normalizedName: normalizeIngredient(name),
+      normalizedName,
       expiresSoon,
     };
     setIngredients((prev) => [...prev, newIngredient]);
@@ -310,7 +316,7 @@ export function App() {
           isCooked={cookedRecipes.includes(selectedRecipe.id)}
           onToggleFavorite={handleToggleFavorite}
           onMarkCooked={handleMarkCooked}
-          onClose={() => setSelectedRecipeId(null)}
+          onClose={handleCloseRecipe}
         />
       )}
 
